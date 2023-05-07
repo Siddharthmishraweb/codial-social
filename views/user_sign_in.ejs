@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="/css/user_sign_in.css">
+<title>
+   <%= title %>
+</title>
+<div class="container">
+    <H1>Login Page</H1>
+</div>
+<form action="/users/create-session" method="post">
+   <input type="text" name="email" placeholder="Email" required>
+   <input type="password" name="password" placeholder="Password" required>
+   <input type="submit" value="Sign In">
+</form>
