@@ -70,8 +70,37 @@ module.exports.create = function(req, res){
 }
 
 
+// module.exports.create = function(req, res){
+//    if(req.body.password != req.body.confirm_password){
+//       return res.redirect('back');
+//    }
+//    console.log('************************', User);
+//    User.findOne({email: req.body.email}).exec()
+//       .then(user => {
+//          if(!user){
+//             User.create(req.body)
+//                .then(user => {
+//                   console.log('User created');
+//                   return res.redirect('/users/signIn');
+//                })
+//                .catch(err => {
+//                   console.log('Getting error while creating user in sign up', err);
+//                   return res.redirect('back');
+//                });
+//          }else{
+//             // if user Already Exist
+//             return res.redirect('back');
+//          }
+//       })
+//       .catch(err => {
+//          console.log('Getting error while sign up', err);
+//          return res.redirect('back');
+//       });
+// }
+
+
 
 // get the user detail on sign In
 module.exports.createSession = function(req, res){
-   // Todo later
- }
+   return res.redirect('/');
+}
