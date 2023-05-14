@@ -1,20 +1,76 @@
-<header>
-   Page Header
-   <ul>
+<header class="navbar">
+   <!-- Page Header -->
+   <!-- <div class = 'header'>
+      <span id = 'header-front'>
+         <% if(locals.user){%>
+               <%= user.name %>
+          <%}%>
+      </span>
+      <span id = 'header-last'>
+         <ul>
+            <% if(locals.user){%>
+               <li>
+                  <a href="/users/profile"><%= user.name %></a>
+               </li>
+               <li>
+                  <a href="/users/sign-out">Sign Out</a>
+               </li>
+            <%} else{%>
+               <li>
+                  <a href="/users/signIn">Sign In</a>
+               </li>
+               <li>
+                  <a href="/users/signUp">Sign Up</a>
+               </li>
+            <%}%>
+         </ul>
+      </span>
+   </div> -->
+
+   <div class="site-identity">
       <% if(locals.user){%>
-         <li>
-            <a href="/users/profile"><%= user.name %></a>
-         </li>
-         <li>
-            <a href="/users/sign-out">Sign Out</a>
-         </li>
-      <%} else{%>
-         <li>
-            <a href="/users/signIn">Sign In</a>
-         </li>
-         <li>
-            <a href="/users/signUp">Sign Up</a>
-         </li>
+       <a href="#"><img class = 'images' src="https://scontent.fhyd1-4.fna.fbcdn.net/v/t39.30808-6/342899380_987899665702014_6601413499622513131_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=jm1yY50WkzcAX_2DjJ1&_nc_ht=scontent.fhyd1-4.fna&oh=00_AfBWijYf5db7LvYOvOGsTv0R3XXkxkLD3tbwzFZD6_UkdA&oe=6465356F" alt="Site Name" /></a>
       <%}%>
-   </ul>
+       <h1><a href="#">
+         <% if(locals.user){%>
+            <%= user.name %>
+         <%} else{%>
+            <%= locals.title%>
+         <%}%>
+      </a></h1>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav">
+         <ul>
+            <% if(locals.user){%>
+               <li>
+                  <a href="/users/profile"><%= user.name %></a>
+               </li>
+               <li>
+                  <a href="/users/sign-out">
+                     <button>
+                        Log Out
+                     </button>
+                  </a>
+               </li>
+            <%} else{%>
+               <li>
+                  <a href="/users/signIn">
+                     <button>
+                        Log In
+                     </button>
+                  </a>
+               </li>
+               <li>
+                  <a href="/users/signUp">
+                     <button>
+                        Sign Up
+                     </button>
+                  </a>
+               </li>
+            <%}%>
+         </ul>
+      </ul>
+    </nav>
+
 </header>

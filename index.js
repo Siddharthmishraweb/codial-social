@@ -12,6 +12,17 @@ const passportLocal = require('./config/passport-local-strategy');
 
 const MongoStore = require('connect-mongo')(session);
 
+const scssMiddleware = require('sass-middleware');
+
+
+app.use(scssMiddleware({
+   src: './assets/scss',
+   dest: './assets/css',
+   debug: true,
+   outputStyle: 'extended',
+   prefix:'/css'
+}))
+
 // create an instance of MongoStore and pass in the mongoose connection object
 const sessionStore = new MongoStore({
   mongooseConnection: db,
