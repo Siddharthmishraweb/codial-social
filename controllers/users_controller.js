@@ -1,9 +1,34 @@
 const User = require('../models/user');
-module.exports.profile = function(req, res){
-   // return res.end('<h1> You are in users controller </h1>');
-   return res.render('user_profile', {
-      title: "Codial Profile Page"
-   });
+
+module.exports.profile = async function(req, res) {
+   try {
+     const user = await User.findById(req.params.id).exec();
+     res.render('user_profile', {
+       title: 'Codial Profile Page',
+       profile_user: user
+     });
+   } catch (err) {
+     // Handle the error
+     console.error(err);
+     // Render an error page or return an error response
+     res.status(500).send('Internal Server Error');
+   }
+ };
+ 
+ 
+ module.exports.update = async function(req, res) {
+   if (req.user.id == req.params.id) {
+      try {
+         const user = await User.findByIdAndUpdate(req.params.id, req.body);
+         return res.redirect('back');
+      } catch (err) {
+         // Handle any errors that occur during the update
+         console.error(err);
+         return res.status(500).send('Internal Server Error');
+      }
+   } else {
+      return res.status(401).send('Unauthorized');
+   }
 }
 
 
