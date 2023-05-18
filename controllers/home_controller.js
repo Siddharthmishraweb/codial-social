@@ -1,34 +1,59 @@
 const Post = require('../models/post');
 const User = require('../models/user');
 
-
-module.exports.home = function (req, res) {
-  Post.find({})
+module.exports.home = async function (req, res) {
+  try{
+    // populate the user of each post
+    let posts = await Post.find({})
     .populate('user')
     .populate({
-      path: 'comments',
-      populate: {
+      path:'comments',
+      populate:{
         path: 'user'
       }
-    })
-    .exec()
-    .then(posts => {
-      return User.find({}).exec()
-        .then(users => {
-          res.render('home', {
-            title: 'Codial Home',
-            posts: posts,
-            all_users: users
-          });
-        });
-    })
-    .catch(err => {
-      // Handle the error
-      console.error(err);
-      // Render an error page or return an error response
-      res.status(500).send('Internal Server Error');
     });
-};
+    
+    let users = await User.find({});
+
+    return res.render('home',{
+      title: 'Codial | Home',
+      posts: posts,
+      all_users: users
+    })
+  }catch{
+    console.log('Error', err);
+    return;
+  }
+}
+
+
+// module.exports.home = function (req, res) {
+//   Post.find({})
+//     .populate('user')
+//     .populate({
+//       path: 'comments',
+//       populate: {
+//         path: 'user'
+//       }
+//     })
+//     .exec()
+//     .then(posts => {
+//       return User.find({}).exec()
+//         .then(users => {
+//           res.render('home', {
+//             title: 'Codial Home',
+//             posts: posts,
+//             all_users: users
+//           });
+//         });
+//     })
+//     .catch(err => {
+//       // Handle the error
+//       console.error(err);
+//       // Render an error page or return an error response
+//       res.status(500).send('Internal Server Error');
+//     });
+// };
 
 
 
