@@ -25,35 +25,55 @@ const { response } = require('express');
 const Comment = require('../models/comment');
 const Post = require('../models/post');
 
-module.exports.create = function(req, res) {
-   Post.findById(req.body.post)
-      .exec()
-      .then(post => {
-         if (!post) {
-            console.log('Post not found');
-            return;
-         }
+module.exports.create = async function(req, res) {
+   try{
+      let post = await Post.findById(req.body.post);
 
-         Comment.create({
+      if(post){
+         let comment = await Comment.create({
             content: req.body.content,
             post: req.body.post,
             user: req.user._id
          })
-            .then(comment => {
-               post.comments.push(comment);
-               return post.save();
-            })
-            .then(() => {
-               res.redirect('/');
-            })
-            .catch(err => {
-               console.log('Error creating comment:', err);
-            });
-      })
-      .catch(err => {
-         console.log('Error finding post:', err);
-      });
-};
+         post.comments.push(comment);
+         post.save();
+         res.redirect('/');
+      }
+   }catch(err){
+     console.log("Error: ", err);
+     return;
+   }
+}
+
+// module.exports.create = function(req, res) {
+//    Post.findById(req.body.post)
+//       .exec()
+//       .then(post => {
+//          if (!post) {
+//             console.log('Post not found');
+//             return;
+//          }
+
+//          Comment.create({
+//             content: req.body.content,
+//             post: req.body.post,
+//             user: req.user._id
+//          })
+//             .then(comment => {
+//                post.comments.push(comment);
+//                return post.save();
+//             })
+//             .then(() => {
+//                res.redirect('/');
+//             })
+//             .catch(err => {
+//                console.log('Error creating comment:', err);
+//             });
+//       })
+//       .catch(err => {
+//          console.log('Error finding post:', err);
+//       });
+// };
 
 module.exports.destroy = async function(req, res) {
    try {
