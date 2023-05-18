@@ -3,7 +3,7 @@ const Comment = require('../models/comment');
 
 module.exports.create = async function(req, res) {
    try {
-     const post = await Post.create({
+     await Post.create({
        content: req.body.content,
        user: req.user._id
      });
@@ -14,24 +14,43 @@ module.exports.create = async function(req, res) {
    }
 }
 
-module.exports.destroy = function(req, res) {
-  Post.findById(req.params.id)
-    .then((post) => {
-      if (post.user == req.user.id) {
-        return Promise.all([
-          post.deleteOne(),
-          Comment.deleteMany({ post: req.params.id })
-        ]);
-      } else {
-        throw new Error('Unauthorized');
-      }
-    })
-    .then(() => {
+module.exports.destroy = async function(req, res) {
+  try{
+    let post = await Post.findById(req.params.id);
+  
+    if(post.user == req.user.id){
+      await post.deleteOne(); // Updated code here
+      await Comment.deleteMany({post: req.params.id}); 
       return res.redirect('back');
-    })
-    .catch((err) => {
-      console.error(err);
+    }else{
       return res.redirect('back');
-    });
-};
+    }
+  }catch(err){
+    console.log('Error occurs: ', err);
+    return;
+  }
+}
+
+
+
+// module.exports.destroy = function(req, res) {
+//   Post.findById(req.params.id)
+//     .then((post) => {
+//       if (post.user == req.user.id) {
+//         return Promise.all([
+//           post.deleteOne(),
+//           Comment.deleteMany({ post: req.params.id })
+//         ]);
+//       } else {
+//         throw new Error('Unauthorized');
+//       }
+//     })
+//     .then(() => {
+//       return res.redirect('back');
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//       return res.redirect('back');
+//     });
+// };
 
