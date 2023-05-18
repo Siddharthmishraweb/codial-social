@@ -35,11 +35,13 @@ module.exports.create = async function(req, res) {
             post: req.body.post,
             user: req.user._id
          })
+         req.flash('success', "Comment Added!");
          post.comments.push(comment);
          post.save();
          res.redirect('/');
       }
    }catch(err){
+      req.flash('error', "Comment not Added!");
      console.log("Error: ", err);
      return;
    }
@@ -82,12 +84,14 @@ module.exports.destroy = async function(req, res) {
      if (comment.user == req.user.id) {
        let postId = comment.post;
        await Comment.findByIdAndDelete(req.params.id);
+       req.flash('success', "Comment Deleted!");
        await Post.findByIdAndUpdate(postId, { $pull: { comments: req.params.id } });
        return res.redirect('back');
      } else {
        return res.redirect('back');
      }
    } catch (err) {
+     req.flash('error', "Comment not deleted!");
      console.error(err);
      return res.redirect('back');
    }

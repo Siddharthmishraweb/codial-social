@@ -7,6 +7,7 @@ module.exports.create = async function(req, res) {
        content: req.body.content,
        user: req.user._id
      });
+     req.flash('success', "Post Created !");
      return res.redirect('back');
    } catch (err) {
      console.log('Error in creating the post', err);
@@ -20,12 +21,14 @@ module.exports.destroy = async function(req, res) {
   
     if(post.user == req.user.id){
       await post.deleteOne(); // Updated code here
+      req.flash('success', "Post Deleted !");
       await Comment.deleteMany({post: req.params.id}); 
       return res.redirect('back');
     }else{
       return res.redirect('back');
     }
   }catch(err){
+    req.flash('error', "Post not Deleted !");
     console.log('Error occurs: ', err);
     return;
   }
