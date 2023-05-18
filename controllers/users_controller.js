@@ -133,6 +133,7 @@ module.exports.create = function(req, res){
 
 // get the user detail on sign In
 module.exports.createSession = function(req, res){
+   req.flash('success', 'Logged in Successfully');
    return res.redirect('/');
 }
 
@@ -141,6 +142,7 @@ module.exports.destroySession = function(req, res){
       if(err){
          console.log(err);
       }
+      req.flash('success', 'Logged out Successfully');
       return res.redirect('/');
    });
 }
