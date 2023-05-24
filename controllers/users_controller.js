@@ -19,8 +19,20 @@ module.exports.profile = async function(req, res) {
  module.exports.update = async function(req, res) {
    if (req.user.id == req.params.id) {
       try {
-         const user = await User.findByIdAndUpdate(req.params.id, req.body);
-         return res.redirect('back');
+         // const user = await User.findByIdAndUpdate(req.params.id, req.body);
+         // return res.redirect('back');
+         let user = await User.findById(req.params.id);
+         User.uploadedAvatar(req, res, function(err){
+            if(err){ console.log('*MulterError*',err) }
+            // console.log(req.file);
+            user.name =  req.body.name;
+            user.email = req.body.email;
+            if(req.file){
+               user.avatar = User.avatarPath + '/' + req.file.filename;
+            }
+            user.save();
+            return res.redirect('back');
+         })
       } catch (err) {
          // Handle any errors that occur during the update
          console.error(err);

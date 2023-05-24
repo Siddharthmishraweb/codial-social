@@ -42,6 +42,8 @@ app.set('layout extractStyles', true);
 app.set('layout extractScripts', true);
 
 app.use(express.static('./assets'));
+// make the uploads path avaible to browser
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 
 
