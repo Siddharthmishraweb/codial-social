@@ -24,6 +24,8 @@
 const { response } = require('express');
 const Comment = require('../models/comment');
 const Post = require('../models/post');
+const User = require('../models/user');
+const commentsMailer = require('../mailers/comments_mailer');
 
 module.exports.create = async function(req, res) {
    try{
@@ -38,6 +40,8 @@ module.exports.create = async function(req, res) {
          req.flash('success', "Comment Added!");
          post.comments.push(comment);
          post.save();
+         comment = await Comment.populate(comment, { path: 'user', select: 'name email' });
+         commentsMailer.newComment(comment);
          res.redirect('/');
       }
    }catch(err){
