@@ -158,7 +158,7 @@ module.exports.createSession = function(req, res){
 module.exports.destroySession = function(req, res){
    req.logout(function(err){
       if(err){
-         console.log(err);
+         console.log("Error from users_controller ",err);
       }
       req.flash('success', 'Logged out Successfully');
       return res.redirect('/');
