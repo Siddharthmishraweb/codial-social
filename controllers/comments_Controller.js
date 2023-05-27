@@ -24,6 +24,10 @@
 const { response } = require('express');
 const Comment = require('../models/comment');
 const Post = require('../models/post');
+const User = require('../models/user');
+const commentsMailer = require('../mailers/comments_mailer');
+const commentEmailWorker = require('../workers/comment_email_worker');
+const queue = require('../config/kue')
 
 module.exports.create = async function(req, res) {
    try{
@@ -38,6 +42,12 @@ module.exports.create = async function(req, res) {
          req.flash('success', "Comment Added!");
          post.comments.push(comment);
          post.save();
+         comment = await Comment.populate(comment, { path: 'user', select: 'name email' });
+         //commentsMailer.newComment(comment);
+         let job = queue.create('emails', comment).save(function(err){
+          if(err){console.log('Error in creating a queue', err); return;}
+          console.log('Job Enqueued: ',job.id)
+         })
          res.redirect('/');
       }
    }catch(err){
