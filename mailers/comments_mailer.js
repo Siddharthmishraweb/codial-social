@@ -5,7 +5,7 @@ exports.newComment = (comment) => {
    let htmlString = nodeMailer.renderTemplate({comment: comment}, '/comments/new_comment.ejs');
 
 
-   console.log('Inside newComment mailer', comment);
+   console.log('Inside newComment mailer');
    nodeMailer.transporter.sendMail({
       from: 'siddharth23mishra@gmail.com',
       to: comment.user.email,
@@ -13,7 +13,7 @@ exports.newComment = (comment) => {
       html: htmlString
    },(err, info) => {
        if(err){console.log('Error in sending mail', err); return;}
-       console.log('Message sent! ', info);
+       console.log('Message sent! ');
        return;
    });
 }
