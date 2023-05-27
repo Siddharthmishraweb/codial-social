@@ -24,8 +24,8 @@ module.exports.toogleLike = async function(req, res){
       if(existingLike){
         likeable.likes.pull(existingLike._id);
         likeable.save();
-        existingLike.remove();
-        deleted: true;
+        await Like.findByIdAndDelete(existingLike._id);
+        deleted = true;
       }else{
          // make a  new like
          let newLike = await Like.create({
@@ -42,13 +42,10 @@ module.exports.toogleLike = async function(req, res){
             deleted: deleted
          }
       })
-
    }catch(err){
       console.log(err);
       return res.json(500, {
          message: 'Internal Server Error'
       })
-
    }
-
 }
