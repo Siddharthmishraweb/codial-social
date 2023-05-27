@@ -2,7 +2,8 @@ const User = require('../models/user');
 const fs = require('fs');
 const path = require('path');
 const queue = require('../config/kue');
-const userEmailWorker = require('../mailers/user_mailer');
+const crypto = require('crypto');
+const userEmailWorker = require('../mailers/users_mailer');
 
 module.exports.profile = async function(req, res) {
    try {
@@ -169,6 +170,7 @@ module.exports.destroySession = function(req, res){
 
 module.exports.resetPassword = function(req, res)
 {
+   console.log('Inside controller')
     return res.render('reset_password',
     {
         title: 'Codeial | Reset Password',
@@ -178,9 +180,10 @@ module.exports.resetPassword = function(req, res)
 
 
 module.exports.resetPassMail = async function(req, res) {
+   console.log('AA GYE')
    try {
      const user = await User.findOne({ email: req.body.email });
- 
+     console.log(user)
      if (user) {
        if (user.isTokenValid === false) {
          user.accessToken = crypto.randomBytes(30).toString('hex');
@@ -193,7 +196,7 @@ module.exports.resetPassMail = async function(req, res) {
            console.log('Error in sending to the queue', err);
            return;
          }
-         // console.log('Job enqueued', job.id);
+         console.log('Job enqueued', job.id);
        });
  
        req.flash('success', 'Password reset link sent. Please check your mail');
