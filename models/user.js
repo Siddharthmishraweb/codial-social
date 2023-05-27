@@ -19,7 +19,17 @@ const userSchema = new mongoose.Schema({
    },
    avatar:{
       type: String
-   }
+   },
+    accessToken:
+    {
+        type: String,
+        default: 'abc'
+    },
+    isTokenValid:
+    {
+        type: Boolean,
+        default: false
+    }
 }, {
    // for adding created_At and updated_at
    timestamps: true
